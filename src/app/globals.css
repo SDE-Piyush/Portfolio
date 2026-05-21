@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+:root {
+  --background: #060b18;
+  --foreground: #fafafa;
+  --accent-pink: #ec4899;
+  --accent-cyan: #22d3ee;
+  --accent-violet: #8b5cf6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+@media (pointer: fine) {
+  html,
+  html *,
+  html *::before,
+  html *::after {
+    cursor: none !important;
+  }
+}
+
+::selection {
+  background: rgba(236, 72, 153, 0.35);
+  color: #fff;
+}
+
+/* ── Gradient utilities (reference design) ── */
+.gradient-heading {
+  background: linear-gradient(90deg, #f472b6, #c084fc, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-divider {
+  background: linear-gradient(90deg, #ec4899, #8b5cf6, #22d3ee);
+}
+
+.gradient-text-accent {
+  background: linear-gradient(90deg, #f9a8d4, #67e8f9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Live space background (inspired by cosmic 3D portfolios) ── */
+.live-bg__base {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, #1a1040 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, #0c1835 0%, transparent 45%),
+    linear-gradient(180deg, #050810 0%, #060b18 40%, #04060f 100%);
+}
+
+.live-bg__aurora {
+  filter: blur(90px);
+  opacity: 0.45;
+  will-change: transform;
+}
+
+.live-bg__aurora--1 {
+  background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+  animation: aurora-drift-1 20s ease-in-out infinite;
+}
+
+.live-bg__aurora--2 {
+  background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+  animation: aurora-drift-2 25s ease-in-out infinite;
+}
+
+.live-bg__aurora--3 {
+  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+  animation: aurora-drift-3 22s ease-in-out infinite;
+}
+
+.live-bg__vignette {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 0%,
+    transparent 45%,
+    rgba(4, 6, 15, 0.85) 100%
+  );
+}
+
+.live-bg__scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.04) 2px,
+    rgba(255, 255, 255, 0.04) 4px
+  );
+  pointer-events: none;
+}
+
+@keyframes aurora-drift-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(60px, 40px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 60px) scale(0.95);
+  }
+}
+
+@keyframes aurora-drift-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-80px, -30px) scale(1.15);
+  }
+}
+
+@keyframes aurora-drift-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(40px, -50px) scale(1.08);
+  }
+  80% {
+    transform: translate(-50px, 20px) scale(0.92);
+  }
+}
+
+/* ── CSS-only 3D hobby cube (GPU-friendly) ── */
+.cube-scene {
+  perspective: 900px;
+}
+
+.cube {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+  animation: cube-spin 24s linear infinite;
+  will-change: transform;
+}
+
+.cube-face {
+  position: absolute;
+  display: flex;
+  width: 160px;
+  height: 160px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 12px;
+  background: rgba(13, 21, 40, 0.85);
+  box-shadow:
+    0 0 30px rgba(34, 211, 238, 0.15),
+    inset 0 0 20px rgba(139, 92, 246, 0.08);
+  backface-visibility: hidden;
+  padding: 12px;
+}
+
+.cube-face--front {
+  transform: rotateY(0deg) translateZ(80px);
+}
+.cube-face--back {
+  transform: rotateY(180deg) translateZ(80px);
+}
+.cube-face--right {
+  transform: rotateY(90deg) translateZ(80px);
+}
+.cube-face--left {
+  transform: rotateY(-90deg) translateZ(80px);
+}
+.cube-face--top {
+  transform: rotateX(90deg) translateZ(80px);
+}
+.cube-face--bottom {
+  transform: rotateX(-90deg) translateZ(80px);
+}
+
+@keyframes cube-spin {
+  from {
+    transform: rotateX(-12deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(-12deg) rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube {
+    animation: none;
+    transform: rotateX(-12deg) rotateY(-28deg);
+  }
+  .live-bg__aurora {
+    animation: none;
+  }
+}
+
+main,
+footer {
+  position: relative;
+  z-index: 10;
+}
+
+header {
+  position: relative;
+  z-index: 50;
+}
